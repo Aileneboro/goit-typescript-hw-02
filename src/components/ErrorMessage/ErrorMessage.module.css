@@ -1,0 +1,8 @@
+.errorText {
+  color: red;
+  font-size: 24px;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  margin-top: 50px;
+}
