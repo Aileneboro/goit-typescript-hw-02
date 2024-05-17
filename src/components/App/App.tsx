@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import SearchBar from "../SearchBar/SearchBar";
 import ImageGallery from "../ImageGallery/ImageGallery";
@@ -7,31 +7,31 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "../ImageModal/ImageModal";
 import fetchApi from "../../api";
+import { ApiResponse, Image } from "../../Types";
 
-const App = () => {
-  const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [showBtn, setShowBtn] = useState(false);
+const App: React.FC = () => {
+  const [images, setImages] = useState<Image[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+  const [showBtn, setShowBtn] = useState<boolean>(false);
 
-  const handleSearch = async (topic) => {
+  const handleSearch = async (topic: string) => {
     setQuery(topic);
     setPage(1);
-    setImages([]);
     setLoading(true);
     setError(null);
 
     try {
-      const data = await fetchApi(topic, 1);
+      const data: ApiResponse = await fetchApi(topic, 1);
       if (data.results.length === 0) {
         setError("Sorry... there are no images for your search!");
       } else {
         setImages(data.results);
-        setShowBtn(data.total_pages && data.total_pages !== 1);
+        setShowBtn(data.total_pages > 1);
       }
     } catch (error) {
       setError("Whoops... something went wrong");
@@ -45,9 +45,9 @@ const App = () => {
     setLoading(true);
 
     try {
-      const data = await fetchApi(query, page + 1);
-      setImages((prevImages) => [...prevImages, ...data.results]);
-      setShowBtn(data.total_pages && data.total_pages !== page + 1);
+      const data: ApiResponse = await fetchApi(query, page + 1);
+      setImages((prevImages: Image[]) => [...prevImages, ...data.results]);
+      setShowBtn(data.total_pages > 1);
     } catch (error) {
       setError("Whoops... something went wrong");
     }
@@ -55,7 +55,7 @@ const App = () => {
     setLoading(false);
   };
 
-  const openModal = (image) => {
+  const openModal = (image: Image) => {
     setSelectedImage(image);
     setModalIsOpen(true);
   };
@@ -87,11 +87,7 @@ const App = () => {
         <ImageModal
           closeModal={closeModal}
           modalIsOpen={modalIsOpen}
-          imageSrc={selectedImage.urls.regular}
-          imageAltDescription={selectedImage.alt_description}
-          imageDescription={selectedImage.description}
-          imageAuthor={selectedImage.user.name}
-          imageLikes={selectedImage.likes}
+          image={selectedImage}
         />
       )}
     </div>

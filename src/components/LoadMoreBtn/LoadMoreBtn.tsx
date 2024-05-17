@@ -1,4 +1,11 @@
-const LoadMoreBtn = ({ onClick, show }) => {
+import React from "react";
+
+type LoadMoreBtnProps = {
+  onClick: () => void;
+  show: boolean;
+};
+
+const LoadMoreBtn: React.FC<LoadMoreBtnProps> = ({ onClick, show }) => {
   return (
     <>
       {show && (

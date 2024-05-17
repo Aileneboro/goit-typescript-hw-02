@@ -1,16 +1,19 @@
 import css from "./ImageModal.module.css";
 import Modal from "react-modal";
+import { Image } from "../../Types";
 
 Modal.setAppElement("#root");
 
-const ImageModal = ({
+type ImageModalProps = {
+  closeModal: () => void;
+  modalIsOpen: boolean;
+  image: Image;
+};
+
+const ImageModal: React.FC<ImageModalProps> = ({
   closeModal,
   modalIsOpen,
-  imageSrc,
-  imageAltDescription,
-  imageDescription,
-  imageAuthor,
-  imageLikes,
+  image,
 }) => {
   return (
     <Modal
@@ -23,14 +26,14 @@ const ImageModal = ({
         <div>
           <img
             className={css.modalImage}
-            src={imageSrc}
-            alt={imageAltDescription}
+            src={image.urls.regular}
+            alt={image.alt_description}
           />
         </div>
         <div className={css.modalText}>
-          <p>{imageDescription}</p>
-          <p>Author: {imageAuthor}</p>
-          <p>Likes: {imageLikes}</p>
+          <p>{image.description}</p>
+          <p>Author: {image.user.name}</p>
+          <p>Likes: {image.likes}</p>
         </div>
       </div>
     </Modal>
