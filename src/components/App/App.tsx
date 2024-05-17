@@ -41,13 +41,14 @@ const App: React.FC = () => {
   };
 
   const loadMoreImages = async () => {
-    setPage(page + 1);
     setLoading(true);
+    const nextPage = page + 1;
 
     try {
-      const data: ApiResponse = await fetchApi(query, page + 1);
+      const data: ApiResponse = await fetchApi(query, nextPage);
       setImages((prevImages: Image[]) => [...prevImages, ...data.results]);
-      setShowBtn(data.total_pages > 1);
+      setPage(nextPage);
+      setShowBtn(data.total_pages > nextPage);
     } catch (error) {
       setError("Whoops... something went wrong");
     }
